@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<style>
+body{
+background:black;
+color:white;
+text-align:center;
+font-family:Arial;
+}
+
+/* SEARCH BOX */
+#search{
+padding:10px;
+margin:20px;
+width:250px;
+border-radius:5px;
+border:none;
+}
+
+/* TABLE */
+table{
+margin:auto;
+width:90%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid white;
+padding:10px;
+}
+
+/* STATUS COLORS */
+.free{
+background:green;
+padding:5px 10px;
+border-radius:5px;
+}
+
+.occupied{
+background:red;
+padding:5px 10px;
+border-radius:5px;
+}
+
+/* BUTTON */
+button{
+padding:5px 10px;
+background:red;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+}
+
+/* BUTTON HOVER */
+button:hover{
+background:#ff3333;
+}
+</style>
+
+<script>
+// FREE SLOT FUNCTION
+function exitSlot(slot){
+
+fetch("/exit_slot", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body: "slot=" + encodeURIComponent(slot)
+})
+
+.then(res => res.json())
+.then(data => {
+    alert("Slot Freed Successfully")
+    location.reload()
+})
+
+}
+
+// SEARCH FUNCTION
+function searchSlot(){
+let input = document.getElementById("search").value.toLowerCase();
+let rows = document.querySelectorAll("table tr");
+
+rows.forEach((row, index) => {
+    if(index === 0) return;
+    let text = row.innerText.toLowerCase();
+    row.style.display = text.includes(input) ? "" : "none";
+});
+}
+
+// AUTO REFRESH (5 sec)
+setInterval(function(){
+    location.reload();
+}, 5000);
+
+</script>
+
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<h3>
+Free Slots: {{ free_slots }} | 
+Occupied Slots: {{ occupied_slots }} <br>
+Total Slots: {{ free_slots + occupied_slots }}
+</h3>
+
+<!-- SEARCH BOX -->
+<input type="text" id="search" placeholder="Search Slot..." onkeyup="searchSlot()">
+
+<table>
+
+<tr>
+<th>Slot</th>
+<th>Status</th>
+<th>Email</th>
+<th>Name</th>
+<th>Car</th>
+<th>Number</th>
+<th>Time</th>
+<th>Action</th>
+</tr>
+
+{% for slot in slots %}
+
+<tr>
+<td>{{ slot.slot_name }}</td>
+
+<td>
+{% if slot.status == 'free' %}
+<span class="free">Free</span>
+{% else %}
+<span class="occupied">Occupied</span>
+{% endif %}
+</td>
+
+<!-- FIX: SHOW "-" IF EMPTY -->
+<td>{{ slot.email if slot.email else '-' }}</td>
+<td>{{ slot.name if slot.name else '-' }}</td>
+<td>{{ slot.carname if slot.carname else '-' }}</td>
+<td>{{ slot.carnumber if slot.carnumber else '-' }}</td>
+<td>{{ slot.time if slot.time else '-' }}</td>
+
+<td>
+{% if slot.status == 'occupied' %}
+<button onclick="exitSlot('{{slot.slot_name}}')">
+Free Slot
+</button>
+{% else %}
+-
+{% endif %}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
+
