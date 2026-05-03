@@ -1,6 +1,5 @@
-
 flask
 mysql-connector-python
 gunicorn
-qrcode
+qrcode[pil]
 pillow
