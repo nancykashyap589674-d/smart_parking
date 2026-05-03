@@ -19,7 +19,7 @@ app.secret_key = 'supersecretkey'
 #    password="2004",
 #    database="smart_parking",
     
-)
+#)
 
 #cursor = db.cursor(dictionary=True)
 
