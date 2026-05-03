@@ -36,7 +36,7 @@ def generate_qr(email):
     filename = f"{email}.png"
     path = os.path.join("static", "qrcodes", filename)
 
-    data = "http://10.33.21.83:5000/parking_entry?email=" + email + "&slot=ALL"
+    data = request.host_url + "parking_entry?email=" + email + "&slot=ALL"
 
 
     qr = qrcode.make(data)
