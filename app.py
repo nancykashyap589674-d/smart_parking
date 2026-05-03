@@ -13,15 +13,15 @@ app.secret_key = 'supersecretkey'
 # -------------------------------
 # MYSQL CONNECTION
 # -------------------------------
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="2004",
-    database="smart_parking",
+#db = mysql.connector.connect(
+#    host="localhost",
+#    user="root",
+#    password="2004",
+#    database="smart_parking",
     
 )
 
-cursor = db.cursor(dictionary=True)
+#cursor = db.cursor(dictionary=True)
 
 # -------------------------------
 # EMAIL CONFIGURATION
